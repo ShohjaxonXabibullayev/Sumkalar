@@ -11,12 +11,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'username', 'age', 'addres', 'password', 'confirm_password']
+        fields = ['first_name', 'last_name', 'username', 'age', 'address', 'password', 'confirm_password']
 
     def validate(self, data):
-        if data.get['password'] != data.get['confirm_password']:
+        if data['password'] != data['confirm_password']:
             raise ValidationError({'message':'Parollar mos emas', 'status':status.HTTP_400_BAD_REQUEST})
-        username = data.get['username']
+        username = data['username']
         if CustomUser.objects.filter(username=username).exists():
             raise ValidationError({'message': 'Bu username orqali royhatdan otilgan', 'status': status.HTTP_400_BAD_REQUEST})
 
@@ -33,7 +33,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        Token.objects.create()
+        Token.objects.create(user=user)
 
         return user
 
