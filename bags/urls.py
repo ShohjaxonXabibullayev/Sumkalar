@@ -6,9 +6,9 @@ from .views import *
 # urlpatterns = [
 #     path('', List, name='List'),
 #     path('detail/<int:pk>/', detail, name='detail'),
-#     path('create/', create, name='create'),
+    # path('create/', create, name='create'),
 #     path('update/<int:pk>/', update, name='update'),
-#     path('delete/<int:pk>/', delete, name='delete'),
+#     path('delete/<int:pk>/', delete, name='delete')
 # ]
 
 #APIView uchun
@@ -20,5 +20,7 @@ from .views import *
 #GenericAPIView uchun
 
 urlpatterns = [
-    path('', GenericList.as_view(), name='list')
+    path('', GenericList.as_view(), name='list'),
+    path('create/', Create.as_view(), name='create'),
+    path('update/<int:pk>/', Update.as_view(), name='update'),
 ]

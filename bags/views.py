@@ -1,15 +1,15 @@
 from django.shortcuts import render
 from .models import *
 from .serializer import *
-from rest_framework import status
-from rest_framework.generics import GenericAPIView
+from rest_framework import status, permissions
+from rest_framework.generics import GenericAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import mixins
 from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
-
+from account.user_perm import IsUser
 #Function based view
 
 # @api_view(['GET', ])
@@ -48,7 +48,7 @@ from rest_framework.pagination import PageNumberPagination
 #                          'error': 'bunday id li sumka mavjud emas'})
 #     serializer = SumkalarSerializer(sumka)
 #     return Response({'status':status.HTTP_200_OK, 'data':serializer.data})
-#
+
 # @api_view(['POST'], )
 # def create(request):
 #     serializer = SumkalarSerializer(data=request.data)
@@ -140,6 +140,20 @@ class GenericList(GenericAPIView):
         res = {'data':serializer.data, 'status':status.HTTP_200_OK}
         return paginator.get_paginated_response(res)
 
+class Create(CreateAPIView):
+    queryset = Sumkalar.objects.all()
+    serializer_class = SumkalarSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class Update(UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsUser, ]
+    queryset = Sumkalar.objects.all()
+    serializer_class = SumkalarSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 

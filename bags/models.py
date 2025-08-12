@@ -1,4 +1,6 @@
 from django.db import models
+from account.models import CustomUser
+
 
 class Category(models.Model):
     name = models.CharField(max_length=52)
@@ -7,6 +9,7 @@ class Category(models.Model):
         return self.name
 
 class Sumkalar(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=120)
     type = models.CharField(max_length=100)
     color = models.CharField(max_length=100)
